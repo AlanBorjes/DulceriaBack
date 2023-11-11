@@ -16,6 +16,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
     @GetMapping("/")
     public ResponseEntity<Message> getAll(){
