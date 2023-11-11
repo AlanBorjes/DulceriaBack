@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+import utez.edu.mx.dulceria.status.model.Status;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.store.model.Store;
 // import utez.edu.mx.dulceria.role.model.Role;
@@ -27,6 +28,10 @@ public class Person {
     private int edad;
     @Column()
     private String sexo;
+    @OneToOne(mappedBy = "person")
+    @JsonIgnore
+    private User users;
+
     // @OneToOne(cascade = CascadeType.ALL)
     // @JoinColumn(name = "role_id", referencedColumnName = "id")
     // private Role role;

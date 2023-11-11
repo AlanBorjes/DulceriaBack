@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.repository.UserRepository;
 
 import java.sql.SQLException;
@@ -21,5 +22,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public ResponseEntity<Message> findAll(){
         return  new ResponseEntity<>(new Message("OK",false,userRepository.findAll()), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getByUsername(String username){
+        return userRepository.findByUsername(username);
     }
 }
