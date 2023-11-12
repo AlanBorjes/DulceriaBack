@@ -3,8 +3,11 @@ package utez.edu.mx.dulceria.deliveryPerson.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.store.model.Store;
+import utez.edu.mx.dulceria.visits.model.Visits;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
+import java.util.List;
 
 @Entity
 public class DeliveryPerson {
@@ -20,9 +23,14 @@ public class DeliveryPerson {
     private String route;
     private boolean available;
 
-    @OneToOne(mappedBy = "deliver")
+    @OneToOne(mappedBy = "delivery_person")
     @JsonIgnore
     private Store store;
+
+    @ManyToMany(mappedBy = "delivery_person")
+    @JsonIgnore
+    private List<Visits> visits;
+
 
     public DeliveryPerson() {
     }

@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+import utez.edu.mx.dulceria.deliveryPerson.model.DeliveryPerson;
 import utez.edu.mx.dulceria.person.model.Person;
+import utez.edu.mx.dulceria.visits.model.Visits;
+
+import java.util.List;
 
 @Entity
 public class Store {
@@ -26,9 +30,13 @@ public class Store {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Person owner;
 
-     @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "deliver_id", referencedColumnName = "id")
     private Person deliver;
+
+    @ManyToMany(mappedBy = "store")
+    @JsonIgnore
+    private List<Visits> visits;
 
     public Store() {
     }
