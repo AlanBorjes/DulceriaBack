@@ -1,10 +1,12 @@
 package utez.edu.mx.dulceria.store.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utez.edu.mx.dulceria.person.model.Person;
+import utez.edu.mx.dulceria.visit.model.Visit;
+
+import java.util.List;
 
 @Entity
 public class Store {
@@ -23,12 +25,16 @@ public class Store {
     private String rfc;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id")
     private Person owner;
 
-     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "deliver_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "deliver_id")
     private Person deliver;
+
+    @OneToMany(mappedBy = "store")
+    @JsonIgnore
+    private List<Visit> visitList;
 
     public Store() {
     }
@@ -49,6 +55,24 @@ public class Store {
         this.rfc = rfc;
          this.owner = owner;
         this.deliver = deliver;
+    }
+
+    public Store(long id, String name, String address, String rfc, Person owner, Person deliver, List<Visit> visitList) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.rfc = rfc;
+        this.owner = owner;
+        this.deliver = deliver;
+        this.visitList = visitList;
+    }
+
+    public List<Visit> getVisitList() {
+        return visitList;
+    }
+
+    public void setVisitList(List<Visit> visitList) {
+        this.visitList = visitList;
     }
 
     public long getId() {

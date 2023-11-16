@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.store.model.Store;
+import utez.edu.mx.dulceria.store.model.StoreDTO;
 import utez.edu.mx.dulceria.store.service.StoreService;
 
 @RestController
@@ -25,8 +27,8 @@ public class StoreController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> save(@RequestBody Object object){
-        return  storeService.save(object);
+    public ResponseEntity<Message> save(@RequestBody StoreDTO object){
+        return  storeService.save(new Store(object.getId(),object.getName(),object.getAddress(),object.getRfc(),object.getOwner(),object.getDeliver()));
     }
 
     @PutMapping("/{id}")

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.person.model.Person;
+import utez.edu.mx.dulceria.person.model.PersonDTO;
 import utez.edu.mx.dulceria.person.service.PersonService;
 
 @RestController
@@ -25,8 +27,8 @@ public class PersonController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> save(@RequestBody Object object){
-        return  personService.save(object);
+    public ResponseEntity<Message> save(@RequestBody PersonDTO PersonDTO){
+        return  personService.save(new Person(PersonDTO.getName(), PersonDTO.getLastName(),PersonDTO.getAddress(),PersonDTO.getPhone(),PersonDTO.getEmail(),PersonDTO.getEdad(),PersonDTO.getSexo(),PersonDTO.getOwner(),PersonDTO.getDeliver()));
     }
 
     @PutMapping("/{id}")

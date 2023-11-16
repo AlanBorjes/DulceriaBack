@@ -32,16 +32,16 @@ public class PersonService {
             return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
         }
     }
-
-    public ResponseEntity<Message> save(Object object){
+    @Transactional(rollbackFor = {SQLException.class}) //
+    public ResponseEntity<Message> save(Person person){
         try{
-            Person person = (Person) object;
+            Person savedPerson = personRepository.saveAndFlush(person);
             return  new ResponseEntity<>(new Message("OK",false,personRepository.save(person)), HttpStatus.OK);
         }catch (Exception e){
             return  new ResponseEntity<>(new Message("Error",true,e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @Transactional(rollbackFor = {SQLException.class}) //
     public ResponseEntity<Message> update(Long id, Object object){
         Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isPresent()){
@@ -56,7 +56,7 @@ public class PersonService {
             return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
         }
     }
-
+    @Transactional(rollbackFor = {SQLException.class}) //
     public ResponseEntity<Message> delete(Long id){
         Optional person = personRepository.findById(id);
         if(person.isPresent()){

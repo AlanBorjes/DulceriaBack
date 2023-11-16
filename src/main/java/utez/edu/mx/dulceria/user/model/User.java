@@ -3,7 +3,6 @@ package utez.edu.mx.dulceria.user.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.rol.model.Rol;
-import utez.edu.mx.dulceria.status.model.Status;
 
 import javax.persistence.*;
 import java.util.Set;

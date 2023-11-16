@@ -32,16 +32,12 @@ public class StoreService {
             return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
         }
     }
-
-    public ResponseEntity<Message> save(Object object){
-        try{
-            Store store = (Store) object;
-            return  new ResponseEntity<>(new Message("OK",false,storeRepository.save(store)), HttpStatus.OK);
-        }catch (Exception e){
-            return  new ResponseEntity<>(new Message("Error",true,e.getMessage()), HttpStatus.BAD_REQUEST);
-        }
+    @Transactional(rollbackFor = {SQLException.class}) //
+    public ResponseEntity<Message> save(Store object){
+        Store saved = storeRepository.saveAndFlush(object);
+        return new ResponseEntity<>(new Message("Persona registrada correctamente", false, saved), HttpStatus.OK);
     }
-
+    @Transactional(rollbackFor = {SQLException.class}) //
     public ResponseEntity<Message> update(Long id, Object object){
         Optional<Store> optionalStore = storeRepository.findById(id);
         if(optionalStore.isPresent()){
@@ -56,7 +52,7 @@ public class StoreService {
             return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
         }
     }
-
+    @Transactional(rollbackFor = {SQLException.class}) //
     public ResponseEntity<Message> delete(Long id){
         Optional<Store> optionalStore = storeRepository.findById(id);
         if(optionalStore.isPresent()){

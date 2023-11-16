@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
-import utez.edu.mx.dulceria.status.model.Status;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.store.model.Store;
-// import utez.edu.mx.dulceria.role.model.Role;
 
 @Entity
 public class Person {
@@ -63,12 +61,46 @@ public class Person {
 
     }
 
+    public Person(long id, String name, String lastName, String address, String phone, String email, int edad, String sexo) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.edad = edad;
+        this.sexo = sexo;
+    }
+
+    public Person(long id, String name, String lastName, String address, String phone, String email, int edad, String sexo, User users, Store owner, Store deliver) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.edad = edad;
+        this.sexo = sexo;
+        this.users = users;
+        this.owner = owner;
+        this.deliver = deliver;
+    }
 
     public Person() {
 
     }
 
-    
+    public Person(long id) {
+        this.id = id;
+    }
+
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 
     public long getId() { return id; }
 
