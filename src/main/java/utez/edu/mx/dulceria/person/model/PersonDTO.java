@@ -1,10 +1,10 @@
 package utez.edu.mx.dulceria.person.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import utez.edu.mx.dulceria.store.model.Store;
 import utez.edu.mx.dulceria.user.model.User;
 
-import javax.persistence.*;
+
 
 public class PersonDTO {
     private long id;
