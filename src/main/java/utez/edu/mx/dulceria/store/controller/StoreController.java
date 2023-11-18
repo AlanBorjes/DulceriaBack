@@ -32,8 +32,8 @@ public class StoreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Message> update(@PathVariable Long id, @RequestBody Object object){
-        return  storeService.update(id,object);
+    public ResponseEntity<Message> update(@RequestBody StoreDTO object){
+        return  storeService.update(new Store(object.getId(),object.getName(),object.getAddress(),object.getRfc(),object.getOwner(),object.getDeliver()));
     }
 
     @DeleteMapping("/{id}")
