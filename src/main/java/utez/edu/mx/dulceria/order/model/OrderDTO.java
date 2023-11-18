@@ -1,53 +1,35 @@
 package utez.edu.mx.dulceria.order.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import utez.edu.mx.dulceria.orderHasProduct.model.Order_has_Product;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
 import utez.edu.mx.dulceria.visit.model.Visit;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "orders")
-public class Order {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class OrderDTO {
     private long id;
-
-    @Column()
     private String description;
-
-    @Column()
     private String observaciones;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "status_order_id", referencedColumnName = "id")
     private Status_order status;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "visit_id", referencedColumnName = "id")
     private Visit visit;
-
-    @OneToMany(mappedBy = "order")
     private List<Order_has_Product> productList;
 
-    public Order() {
+    public OrderDTO() {
     }
 
-    public Order(long id, String description, String observaciones, Status_order status) {
+    public OrderDTO(long id, String description, String observaciones) {
+        this.id = id;
+        this.description = description;
+        this.observaciones = observaciones;
+    }
+
+    public OrderDTO(long id, String description, String observaciones, Status_order status, Visit visit, List<Order_has_Product> productList) {
         this.id = id;
         this.description = description;
         this.observaciones = observaciones;
         this.status = status;
-    }
-
-    public Order(long id, String description, String observaciones, Status_order status, List<Order_has_Product> productList) {
-        this.id = id;
-        this.description = description;
-        this.observaciones = observaciones;
-        this.status = status;
-        productList = productList;
+        this.visit = visit;
+        this.productList = productList;
     }
 
     public long getId() {
