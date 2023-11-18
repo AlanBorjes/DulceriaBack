@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.visit.model.Visit;
 import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
@@ -39,13 +40,21 @@ public class VisitService  {
         return new ResponseEntity<>(new Message("Visit registered successfully", false, savedVisit), HttpStatus.OK);
     }
 
-    @Transactional(rollbackFor = {SQLException.class})
+    /*@Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Message> update(Visit visit) {
         Optional<Visit> optionalVisit = visitRepository.findById(visit.getId());
         return optionalVisit.map(value -> {
             Visit updatedVisit = visitRepository.saveAndFlush(visit);
             return new ResponseEntity<>(new Message("Visit updated successfully", false, updatedVisit), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
+    }*/
+
+    @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
+    public ResponseEntity<Message> update(Visit visit){
+        if(visitRepository.existsById(visit.getId())){
+            return new ResponseEntity<>(new Message("OK", false, visitRepository.saveAndFlush(visit)), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Message("La visita no está registrada", true, null), HttpStatus.BAD_REQUEST);
     }
 
     @Transactional(rollbackFor = {SQLException.class})

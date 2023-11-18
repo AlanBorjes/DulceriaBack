@@ -11,6 +11,15 @@ public class VisitDTO {
     public VisitDTO() {
     }
 
+    public VisitDTO(Status_visit status, Store store) {
+        this.status = status;
+        this.store = store;
+    }
+
+    public VisitDTO(Store store) {
+        this.store = store;
+    }
+
     public VisitDTO(long id, String day_visit, Status_visit status, Store store) {
         this.id = id;
         this.day_visit = day_visit;
