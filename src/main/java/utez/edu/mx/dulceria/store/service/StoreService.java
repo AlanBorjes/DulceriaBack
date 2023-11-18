@@ -10,61 +10,54 @@ import utez.edu.mx.dulceria.store.repository.StoreRepository;
 import utez.edu.mx.dulceria.store.model.Store;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class StoreService {
+
     @Autowired
-    StoreRepository storeRepository;
+    private StoreRepository storeRepository;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Message> findAll(){
-        return  new ResponseEntity<>(new Message("OK",false,storeRepository.findAll()), HttpStatus.OK);
+    public ResponseEntity<Message> findAll() {
+        List<Store> stores = storeRepository.findAll();
+        return new ResponseEntity<>(new Message("OK", false, stores), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Message> findById(Long id){
-        Optional store = storeRepository.findById(id);
-        if(store.isPresent()){
-            return  new ResponseEntity<>(new Message("OK",false,store), HttpStatus.OK);
-        }else{
-            return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Message> findById(Long id) {
+        Optional<Store> store = storeRepository.findById(id);
+        return store.map(value -> new ResponseEntity<>(new Message("OK", false, value), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
     }
-    @Transactional(rollbackFor = {SQLException.class}) //
-    public ResponseEntity<Message> save(Store object){
-        Store saved = storeRepository.saveAndFlush(object);
-        return new ResponseEntity<>(new Message("Persona registrada correctamente", false, saved), HttpStatus.OK);
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> save(Store store) {
+        Store savedStore = storeRepository.saveAndFlush(store);
+        return new ResponseEntity<>(new Message("Store registered successfully", false, savedStore), HttpStatus.OK);
     }
-    @Transactional(rollbackFor = {SQLException.class}) //
-    public ResponseEntity<Message> update(Long id, Object object){
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> update(Store store) {
+        Optional<Store> optionalStore = storeRepository.findById(store.getId());
+        return optionalStore.map(value -> {
+            Store updatedStore = storeRepository.saveAndFlush(store);
+            return new ResponseEntity<>(new Message("Store updated successfully", false, updatedStore), HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> delete(Long id) {
         Optional<Store> optionalStore = storeRepository.findById(id);
-        if(optionalStore.isPresent()){
-            try{
-                Store store = (Store) object;
-                store.setId(id);
-                return  new ResponseEntity<>(new Message("OK",false,storeRepository.save(store)), HttpStatus.OK);
-            }catch (Exception e){
-                return  new ResponseEntity<>(new Message("Error",true,e.getMessage()), HttpStatus.BAD_REQUEST);
-            }
-        }else{
-            return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
-        }
-    }
-    @Transactional(rollbackFor = {SQLException.class}) //
-    public ResponseEntity<Message> delete(Long id){
-        Optional<Store> optionalStore = storeRepository.findById(id);
-        if(optionalStore.isPresent()){
-            try{
+        return optionalStore.map(value -> {
+            try {
                 storeRepository.deleteById(id);
-                return  new ResponseEntity<>(new Message("OK",false,null), HttpStatus.OK);
-            }catch (Exception e){
-                return  new ResponseEntity<>(new Message("Error",true,e.getMessage()), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new Message("OK", false, null), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new Message("Error", true, e.getMessage()), HttpStatus.BAD_REQUEST);
             }
-        }else{
-            return  new ResponseEntity<>(new Message("Not found",true,null), HttpStatus.NOT_FOUND);
-        }
+        }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
     }
-
 }
