@@ -1,39 +1,19 @@
 package utez.edu.mx.dulceria.product.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import utez.edu.mx.dulceria.orderHasProduct.model.Order_has_Product;
+public class ProductDTO {
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity
-
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column()
     private String name;
-
-    @Column()
     private String description;
-
-    @Column()
     private double price;
 
-    @Column()
     private String image;
 
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    private List<Order_has_Product> orderList;
 
-    public Product() {
+    public ProductDTO() {
     }
 
-    public Product(long id, String name, String description, double price, String image) {
+    public ProductDTO(long id, String name, String description, double price, String image) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -41,12 +21,14 @@ public class Product {
         this.image = image;
     }
 
-    public Product(String name, String description, double price, String image) {
+    public ProductDTO(String name, String description, double price, String image) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
     }
+
+    // Getters y setters
 
     public long getId() {
         return id;
@@ -86,13 +68,5 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public List<Order_has_Product> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<Order_has_Product> orderList) {
-        this.orderList = orderList;
     }
 }
