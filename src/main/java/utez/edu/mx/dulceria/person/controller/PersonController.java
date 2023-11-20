@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.Message;
-import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.person.model.PersonDTO;
 import utez.edu.mx.dulceria.person.service.PersonService;
 
@@ -14,32 +13,30 @@ import utez.edu.mx.dulceria.person.service.PersonService;
 public class PersonController {
     
     @Autowired
-    PersonService personService;
+    private PersonService personService;
 
     @GetMapping("/")
     public ResponseEntity<Message> getAll(){
-        return  personService.findAll();
+        return personService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Message> getById(@PathVariable Long id){
-        return  personService.findById(id);
+        return personService.findById(id);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> save(@RequestBody PersonDTO PersonDTO){
-        return  personService.save(new Person(PersonDTO.getName(), PersonDTO.getLastName(),PersonDTO.getAddress(),PersonDTO.getPhone(),PersonDTO.getEmail(),PersonDTO.getEdad(),PersonDTO.getSexo(),PersonDTO.getOwner(),PersonDTO.getDeliver()));
+    public ResponseEntity<Message> save(@RequestBody PersonDTO personDTO){
+        return personService.save(personDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Message> update(@PathVariable Long id, @RequestBody Object object){
-        return  personService.update(id,object);
+    public ResponseEntity<Message> update(@PathVariable Long id, @RequestBody PersonDTO personDTO){
+        return personService.update(id, personDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Message> delete(@PathVariable Long id){
-        return  personService.delete(id);
+        return personService.delete(id);
     }
-
-    
 }
