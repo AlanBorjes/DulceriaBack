@@ -13,8 +13,6 @@ public class Order_has_Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
-    @Column()
     private int cantidad;
 
     @ManyToOne()

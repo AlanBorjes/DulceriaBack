@@ -15,15 +15,14 @@ public class Visit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column()
     private String day_visit;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "status_visit_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "status_visit_id")
     private Status_visit status;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    @JoinColumn(name = "store_id")
     private Store store;
 
     @OneToOne(mappedBy = "visit")
@@ -38,6 +37,13 @@ public class Visit {
         this.status = status;
         this.store = store;
     }
+
+    public Visit(String day_visit, Status_visit status, Store store) {
+        this.day_visit = day_visit;
+        this.status = status;
+        this.store = store;
+    }
+
 
     public long getId() {
         return id;
@@ -70,4 +76,5 @@ public class Visit {
     public void setStore(Store store) {
         this.store = store;
     }
+
 }

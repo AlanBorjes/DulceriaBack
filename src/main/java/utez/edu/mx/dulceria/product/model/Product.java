@@ -13,17 +13,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column()
     private String name;
-
-    @Column()
     private String description;
-
-    @Column()
     private double price;
-
-    @Column()
     private String image;
 
     @OneToMany(mappedBy = "product")

@@ -77,10 +77,7 @@ public class PersonService {
                 person.getPhone(),
                 person.getEmail(),
                 person.getEdad(),
-                person.getSexo(),
-                person.getUsers(),
-                person.getOwner(),
-                person.getDeliver()
+                person.getSexo()
         );
     }
 
@@ -93,10 +90,7 @@ public class PersonService {
                 personDTO.getPhone(),
                 personDTO.getEmail(),
                 personDTO.getEdad(),
-                personDTO.getSexo(),
-                personDTO.getUsers(),
-                personDTO.getOwner(),
-                personDTO.getDeliver()
+                personDTO.getSexo()
         );
     }
 }

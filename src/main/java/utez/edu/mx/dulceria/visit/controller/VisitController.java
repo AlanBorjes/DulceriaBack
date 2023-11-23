@@ -30,7 +30,7 @@ public class VisitController {
 
     @PostMapping("/")
     public ResponseEntity<Message> save(@RequestBody VisitDTO object){
-        return  visitService.save(new Visit(object.getId(),object.getDay_visit(),
+        return  visitService.save(new Visit(object.getDay_visit(),
                 object.getStatus(),object.getStore()));
     }
 

@@ -17,17 +17,10 @@ public class PersonDTO {
 
     private String sexo;
 
-    private User users;
-
-
-    private Store owner;
-
-    private Store deliver;
-
     public PersonDTO() {
     }
 
-    public PersonDTO(long id, String name, String lastName, String address, String phone, String email, int edad, String sexo, User users, Store owner, Store deliver) {
+    public PersonDTO(long id, String name, String lastName, String address, String phone, String email, int edad, String sexo) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -36,9 +29,6 @@ public class PersonDTO {
         this.email = email;
         this.edad = edad;
         this.sexo = sexo;
-        this.users = users;
-        this.owner = owner;
-        this.deliver = deliver;
     }
 
     public long getId() {
@@ -105,27 +95,4 @@ public class PersonDTO {
         this.sexo = sexo;
     }
 
-    public User getUsers() {
-        return users;
-    }
-
-    public void setUsers(User users) {
-        this.users = users;
-    }
-
-    public Store getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Store owner) {
-        this.owner = owner;
-    }
-
-    public Store getDeliver() {
-        return deliver;
-    }
-
-    public void setDeliver(Store deliver) {
-        this.deliver = deliver;
-    }
 }

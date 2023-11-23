@@ -15,11 +15,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column()
     private String description;
-
-    @Column()
     private String observaciones;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_order_id", referencedColumnName = "id")

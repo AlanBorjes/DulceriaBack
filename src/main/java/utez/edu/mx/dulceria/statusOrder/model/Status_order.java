@@ -10,8 +10,6 @@ public class Status_order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column()
     private String desciprtion;
 
     @OneToOne(mappedBy = "status")

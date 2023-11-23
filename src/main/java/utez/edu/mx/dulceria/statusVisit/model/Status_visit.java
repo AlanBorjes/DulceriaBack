@@ -4,6 +4,7 @@ package utez.edu.mx.dulceria.statusVisit.model;
 import utez.edu.mx.dulceria.visit.model.Visit;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 
@@ -16,8 +17,8 @@ public class Status_visit {
     @Column()
     private String desciprtion;
 
-    @OneToOne(mappedBy = "status")
-    private Visit visit;
+    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    private List<Visit> visitList;
 
     public Status_visit() {
     }
@@ -42,4 +43,6 @@ public class Status_visit {
     public void setDesciprtion(String desciprtion) {
         this.desciprtion = desciprtion;
     }
+
+
 }

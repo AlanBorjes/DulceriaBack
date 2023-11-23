@@ -24,6 +24,14 @@ public class StoreDTO {
         this.deliver = deliver;
     }
 
+    public StoreDTO(String name, String address, String rfc, Person owner, Person deliver) {
+        this.name = name;
+        this.address = address;
+        this.rfc = rfc;
+        this.owner = owner;
+        this.deliver = deliver;
+    }
+
     public long getId() {
         return id;
     }

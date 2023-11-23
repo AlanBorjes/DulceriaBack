@@ -28,10 +28,10 @@ public class StoreController {
 
     @PostMapping("/")
     public ResponseEntity<Message> save(@RequestBody StoreDTO object){
-        return  storeService.save(new Store(object.getId(),object.getName(),object.getAddress(),object.getRfc(),object.getOwner(),object.getDeliver()));
+        return  storeService.save(new Store(object.getName(),object.getAddress(),object.getRfc(),object.getOwner(),object.getDeliver()));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/")
     public ResponseEntity<Message> update(@RequestBody StoreDTO object){
         return  storeService.update(new Store(object.getId(),object.getName(),object.getAddress(),object.getRfc(),object.getOwner(),object.getDeliver()));
     }

@@ -17,18 +17,15 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column()
     private String name;
-    @Column()
     private String address;
-    @Column()
     private String rfc;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "owner_id")
     private Person owner;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "deliver_id")
     private Person deliver;
 
@@ -55,6 +52,13 @@ public class Store {
         this.rfc = rfc;
          this.owner = owner;
         this.deliver = deliver;
+    }
+
+    public Store(long id, String name, String address, String rfc) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.rfc = rfc;
     }
 
     public Store(long id, String name, String address, String rfc, Person owner, Person deliver, List<Visit> visitList) {
@@ -95,15 +99,10 @@ public class Store {
 
     public Person getOwner() { return owner; }
 
-    public void setOwner(Person owner) { this.owner = owner; }
+    public void setOwner(Person owner) { this.owner = owner;}
 
     public Person getDeliver() { return deliver; }
 
-    public void setDeliver(Person deliver) { this.deliver = deliver; }
-    
-
-
-
-    
+    public void setDeliver(Person deliver) { this.deliver = deliver;}
     
 }
