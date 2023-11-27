@@ -21,9 +21,9 @@ public class Person {
     private String email;
     private int edad;
     private String sexo;
-    @OneToOne(mappedBy = "person")
+    @OneToMany(mappedBy = "person")
     @JsonIgnore
-    private User users;
+    private List<User> users;
 
     // @OneToOne(cascade = CascadeType.ALL)
     // @JoinColumn(name = "role_id", referencedColumnName = "id")
@@ -65,7 +65,7 @@ public class Person {
         this.sexo = sexo;
     }
 
-    public Person(long id, String name, String lastName, String address, String phone, String email, int edad, String sexo, User users, List<Store>  owner, List<Store> deliver) {
+    public Person(long id, String name, String lastName, String address, String phone, String email, int edad, String sexo, List<User>  users, List<Store>  owner, List<Store> deliver) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -87,11 +87,11 @@ public class Person {
         this.id = id;
     }
 
-    public User getUsers() {
+    public List<User>  getUsers() {
         return users;
     }
 
-    public void setUsers(User users) {
+    public void setUsers(List<User>  users) {
         this.users = users;
     }
 

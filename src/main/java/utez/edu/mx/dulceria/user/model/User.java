@@ -17,7 +17,8 @@ public class User {
     @Column(unique = true)
     private String username;
     private String code;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "person_id")
     private Person person;
     @Column()
@@ -61,6 +62,14 @@ public class User {
     public User(long id, String password, Person person, int status, Set<Rol> authorities) {
         this.id = id;
         this.password = password;
+        this.person = person;
+        this.status = status;
+        this.authorities = authorities;
+    }
+
+    public User(String password, String username, Person person, int status, Set<Rol> authorities) {
+        this.password = password;
+        this.username = username;
         this.person = person;
         this.status = status;
         this.authorities = authorities;
