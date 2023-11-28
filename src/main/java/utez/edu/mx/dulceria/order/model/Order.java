@@ -17,11 +17,11 @@ public class Order {
     private long id;
     private String description;
     private String observaciones;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "status_order_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "status_order_id")
     private Status_order status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "visit_id", referencedColumnName = "id")
     private Visit visit;
 

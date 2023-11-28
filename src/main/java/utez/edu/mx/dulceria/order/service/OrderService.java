@@ -9,8 +9,12 @@ import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.order.model.Order;
 import utez.edu.mx.dulceria.order.model.OrderDTO;
 import utez.edu.mx.dulceria.order.repository.OrderRepository;
+import utez.edu.mx.dulceria.statusOrder.model.StatusOrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
+import utez.edu.mx.dulceria.statusVisit.model.Status_visit;
+import utez.edu.mx.dulceria.store.model.Store;
 import utez.edu.mx.dulceria.visit.model.Visit;
+import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,8 +28,11 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private StatusOrderRepository statusOrderRepository;
+
+    @Autowired
+    private VisitRepository  visitRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<Message> findAllOrders() {
@@ -45,14 +52,14 @@ public class OrderService {
     @Transactional(rollbackFor = {Exception.class})
     public ResponseEntity<Message> saveOrder(OrderDTO orderDTO) {
         try {
-            Status_order managedStatusOrder = entityManager.find(Status_order.class, orderDTO.getStatus().getId());
-            Visit managedVisit = entityManager.find(Visit.class, orderDTO.getVisit().getId());
+            Status_order status = getByOrderVisit(orderDTO.getStatus().getId()).orElseThrow(() -> new RuntimeException("status not found"));
+            Visit visit = getByVisit(orderDTO.getVisit().getId()).orElseThrow(() -> new RuntimeException("status not found"));
 
             Order order = new Order();
             order.setDescription(orderDTO.getDescription());
             order.setObservaciones(orderDTO.getObservaciones());
-            order.setStatus(managedStatusOrder);
-            order.setVisit(managedVisit);
+            order.setStatus(status);
+            order.setVisit(visit);
             order.setProductList(orderDTO.getProductList());
 
             Order savedOrder = orderRepository.saveAndFlush(order);
@@ -89,5 +96,15 @@ public class OrderService {
             orderRepository.deleteById(id);
             return new ResponseEntity<>(new Message("OK", false, null), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Status_order> getByOrderVisit(long id){
+        return statusOrderRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Visit> getByVisit(long id){
+        return visitRepository.findById(id);
     }
 }

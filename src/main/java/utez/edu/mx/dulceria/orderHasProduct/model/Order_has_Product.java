@@ -32,7 +32,13 @@ public class Order_has_Product {
         this.product = product;
     }
 
-    public Order_has_Product(long id, int cantidad, Order order, Product product) {
+    public Order_has_Product( Order order, Product product,int cantidad) {
+        this.cantidad = cantidad;
+        this.order = order;
+        this.product = product;
+    }
+
+    public Order_has_Product(long id,  Order order, Product product ,int cantidad) {
         this.id = id;
         this.cantidad = cantidad;
         this.order = order;

@@ -3,6 +3,7 @@ package utez.edu.mx.dulceria.statusOrder.model;
 import utez.edu.mx.dulceria.order.model.Order;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Status_order {
@@ -12,8 +13,8 @@ public class Status_order {
     private long id;
     private String desciprtion;
 
-    @OneToOne(mappedBy = "status")
-    private Order order;
+    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    private List<Order> order;
 
     public Status_order() {
     }
@@ -23,7 +24,7 @@ public class Status_order {
         this.desciprtion = desciprtion;
     }
 
-    public Status_order(long id, String desciprtion, Order order) {
+    public Status_order(long id, String desciprtion, List<Order>  order) {
         this.id = id;
         this.desciprtion = desciprtion;
         this.order = order;
@@ -45,11 +46,4 @@ public class Status_order {
         this.desciprtion = desciprtion;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

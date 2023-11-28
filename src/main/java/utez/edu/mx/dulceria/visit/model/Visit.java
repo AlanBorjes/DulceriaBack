@@ -7,6 +7,7 @@ import utez.edu.mx.dulceria.store.model.Store;
 import utez.edu.mx.dulceria.user.model.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Visit {
@@ -25,8 +26,8 @@ public class Visit {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(mappedBy = "visit")
-    private Order order;
+    @OneToMany(mappedBy = "visit")
+    private List<Order> order;
 
     public Visit() {
     }
