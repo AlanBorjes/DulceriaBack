@@ -26,6 +26,14 @@ public class Rol {
         this.description = description;
     }
 
+    public Rol(long id) {
+        this.id = id;
+    }
+
+    public Rol(String description) {
+        this.description = description;
+    }
+
     public Rol(String acronym, String description) {
         this.acronym = acronym;
         this.description = description;
@@ -61,5 +69,15 @@ public class Rol {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "Rol{" +
+                "id=" + id +
+                ", acronym='" + acronym + '\'' +
+                ", description='" + description + '\'' +
+                ", users=" + users +
+                '}';
     }
 }

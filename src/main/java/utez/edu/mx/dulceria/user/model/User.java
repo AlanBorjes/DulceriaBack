@@ -18,7 +18,6 @@ public class User {
     private String username;
     private String code;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "person_id")
     private Person person;
     @Column()
@@ -177,5 +176,18 @@ public class User {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", code='" + code + '\'' +
+                ", person=" + person +
+                ", status=" + status +
+                ", authorities=" + authorities +
+                '}';
     }
 }

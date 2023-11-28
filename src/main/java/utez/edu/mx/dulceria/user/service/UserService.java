@@ -8,11 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.person.repository.PersonRepository;
+import utez.edu.mx.dulceria.rol.model.Rol;
+import utez.edu.mx.dulceria.rol.repository.RolRepository;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.repository.UserRepository;
 
+import javax.management.relation.Role;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,6 +28,8 @@ public class UserService {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    RolRepository rolRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<Message> findAll(){
@@ -40,6 +47,13 @@ public class UserService {
             return new ResponseEntity<>(new Message("OK", false, userRepository.findById(id)), HttpStatus.OK);
         }
         return new ResponseEntity<>(new Message("El usuario ya existe", true, userRepository.findById(id)), HttpStatus.BAD_REQUEST);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Message> findAllRepatidor(Rol role){
+        List<User> users = userRepository.findUsersByAuthorities(role);
+
+        return  new ResponseEntity<>(new Message("OK",false,users), HttpStatus.OK);
     }
 
 

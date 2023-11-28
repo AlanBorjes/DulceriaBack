@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.EmailService;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.rol.model.Rol;
+import utez.edu.mx.dulceria.rol.model.RolDTO;
 import utez.edu.mx.dulceria.user.DTO.UserDTO;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.service.UserService;
@@ -35,6 +37,10 @@ public class UserController {
         return  userService.findById(id);
     }
 
+    @GetMapping("/Repatidor/")
+    public ResponseEntity<Message> getAllRepatidor(@RequestBody RolDTO rolDTO){
+        return  userService.findAllRepatidor(new Rol(rolDTO.getId(), rolDTO.getDescription(), rolDTO.getAcronym()));
+    }
 
     @PostMapping("/")
     public  ResponseEntity<Message> saveUsersave(@RequestBody UserDTO userDTO){

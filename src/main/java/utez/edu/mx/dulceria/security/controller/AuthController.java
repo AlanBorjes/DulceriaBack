@@ -12,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.security.jwt.JwtProvider;
+import utez.edu.mx.dulceria.user.model.User;
+import utez.edu.mx.dulceria.user.service.UserService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -25,7 +27,8 @@ public class AuthController {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtProvider jwtprovider;
-
+    @Autowired
+    UserService userService;
     @PostMapping("/login")
     public ResponseEntity<Message> login(@Valid @RequestBody LoginUserDTO loginUserDTO, BindingResult result) {
         if (result.hasErrors())
@@ -38,6 +41,7 @@ public class AuthController {
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
         data.put("user", userDetails);
+        data.put("userInfo", userService.getByUsername(userDetails.getUsername()));
         return new ResponseEntity<>(new Message("ok", false, data), HttpStatus.OK);
     }
 }
