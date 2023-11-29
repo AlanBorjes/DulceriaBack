@@ -33,11 +33,6 @@ public class OrderController {
         return orderService.saveOrder(orderDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Message> updateOrder(@PathVariable long id, @RequestBody OrderDTO updatedOrderDTO) {
-        return orderService.updateOrder(id, updatedOrderDTO);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Message> deleteOrder(@PathVariable long id) {
         return orderService.deleteOrder(id);

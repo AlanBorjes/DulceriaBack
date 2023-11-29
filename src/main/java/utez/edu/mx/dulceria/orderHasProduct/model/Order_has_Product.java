@@ -1,5 +1,6 @@
 package utez.edu.mx.dulceria.orderHasProduct.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utez.edu.mx.dulceria.order.model.Order;
 import utez.edu.mx.dulceria.product.model.Product;
 import utez.edu.mx.dulceria.store.model.Store;
@@ -17,6 +18,7 @@ public class Order_has_Product {
 
     @ManyToOne()
     @JoinColumn(name = "order_id", nullable=false)
+    @JsonIgnore
     private Order order;
 
     @ManyToOne()

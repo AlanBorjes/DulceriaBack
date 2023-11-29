@@ -60,8 +60,6 @@ public class OrderService {
             order.setObservaciones(orderDTO.getObservaciones());
             order.setStatus(status);
             order.setVisit(visit);
-            order.setProductList(orderDTO.getProductList());
-
             Order savedOrder = orderRepository.saveAndFlush(order);
             return new ResponseEntity<>(new Message("OK", false, savedOrder), HttpStatus.OK);
         } catch (Exception e) {
@@ -70,24 +68,7 @@ public class OrderService {
         }
     }
 
-    @Transactional(rollbackFor = {Exception.class})
-    public ResponseEntity<Message> updateOrder(long id, OrderDTO updatedOrderDTO) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
-        return optionalOrder.map(order -> {
-            Status_order managedStatusOrder = entityManager.find(Status_order.class, updatedOrderDTO.getStatus().getId());
-            Visit managedVisit = entityManager.find(Visit.class, updatedOrderDTO.getVisit().getId());
 
-
-            order.setDescription(updatedOrderDTO.getDescription());
-            order.setObservaciones(updatedOrderDTO.getObservaciones());
-            order.setStatus(managedStatusOrder);
-            order.setVisit(managedVisit);
-            order.setProductList(updatedOrderDTO.getProductList());
-
-            Order savedOrder = orderRepository.save(order);
-            return new ResponseEntity<>(new Message("OK", false, savedOrder), HttpStatus.OK);
-        }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
-    }
 
     @Transactional(rollbackFor = {Exception.class})
     public ResponseEntity<Message> deleteOrder(long id) {

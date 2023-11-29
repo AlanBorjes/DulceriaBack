@@ -3,7 +3,9 @@ package utez.edu.mx.dulceria.product.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.Utils.SaveImage;
 import utez.edu.mx.dulceria.product.model.Product;
 import utez.edu.mx.dulceria.product.model.ProductDTO;
 import utez.edu.mx.dulceria.product.service.ProductService;
@@ -15,7 +17,8 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
-
+    @Autowired
+    SaveImage saveImage;
     @GetMapping("/")
     public ResponseEntity<Message> getAll(){
         return productService.findAll();
@@ -27,8 +30,9 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> save(@RequestBody ProductDTO productDTO){
-        return productService.save(new Product(productDTO.getName(), productDTO.getDescription(), productDTO.getPrice(), productDTO.getImage()));
+    public ResponseEntity<Message> save(@RequestParam("file") MultipartFile multipartFile,@RequestParam("name") String name,@RequestParam("description") String description,@RequestParam("price") String price){
+        System.out.println("name: "+name+" description: "+description+" price: "+price);
+        return productService.save(new Product(name, description, Integer.parseInt(price), saveImage.upload(multipartFile)));
     }
 
     @PutMapping("/")
