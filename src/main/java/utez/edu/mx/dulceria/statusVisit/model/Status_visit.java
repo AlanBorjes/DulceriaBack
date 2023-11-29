@@ -27,6 +27,10 @@ public class Status_visit {
         this.desciprtion = desciprtion;
     }
 
+    public Status_visit(String desciprtion) {
+        this.desciprtion = desciprtion;
+    }
+
     public long getId() {
         return id;
     }

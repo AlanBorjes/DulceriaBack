@@ -18,7 +18,9 @@ public class Status_order {
 
     public Status_order() {
     }
-
+    public Status_order(String desciprtion) {
+        this.desciprtion = desciprtion;
+    }
     public Status_order(long id, String desciprtion) {
         this.id = id;
         this.desciprtion = desciprtion;

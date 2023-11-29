@@ -83,6 +83,16 @@ public class Person {
 
     }
 
+    public Person(String name, String lastName, String address, String phone, String email, int edad, String sexo) {
+        this.name = name;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.edad = edad;
+        this.sexo = sexo;
+    }
+
     public Person(long id) {
         this.id = id;
     }
