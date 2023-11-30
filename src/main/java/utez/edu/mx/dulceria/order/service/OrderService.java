@@ -11,14 +11,9 @@ import utez.edu.mx.dulceria.order.model.OrderDTO;
 import utez.edu.mx.dulceria.order.repository.OrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.StatusOrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
-import utez.edu.mx.dulceria.statusVisit.model.Status_visit;
-import utez.edu.mx.dulceria.store.model.Store;
 import utez.edu.mx.dulceria.visit.model.Visit;
 import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
