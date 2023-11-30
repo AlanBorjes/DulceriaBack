@@ -51,9 +51,26 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<Message> findAllRepatidor(Rol role){
-        List<User> users = userRepository.findUsersByAuthorities(role);
+        List<User> users = userRepository.findUsersByAuthoritiesAndStatus(role, 1);
 
         return  new ResponseEntity<>(new Message("OK",false,users), HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> setStatus(long id){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()){
+            User user = userOptional.get();
+            if (user.getStatus() == 1) {
+                user.setStatus(0);
+            } else {
+                user.setStatus(1);
+            }
+            return new ResponseEntity<>(new Message("OK", false, userRepository.saveAndFlush(user)), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new Message("El usuario no existe", true, null), HttpStatus.BAD_REQUEST);
+
+        }
     }
 
 

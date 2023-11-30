@@ -10,5 +10,8 @@ import java.util.Optional;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAll();
+
+    List<Visit> findByStoreId(long id);
+    List<Visit> findByStoreDeliverId(long id);
     boolean existsById(long id);
 }

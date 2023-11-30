@@ -28,6 +28,12 @@ public class VisitController {
         return  visitService.findById(id);
     }
 
+    @GetMapping("/store/{id}")
+    public ResponseEntity<Message> getByStoreId(@PathVariable Long id){return visitService.findByStore(id);}
+
+    @GetMapping("/deliver/{id}")
+    public ResponseEntity<Message> getByDeliverId(@PathVariable Long id){return visitService.findByDeliver(id);}
+
     @PostMapping("/")
     public ResponseEntity<Message> save(@RequestBody VisitDTO object){
         return  visitService.save(new Visit(object.getDay_visit(),

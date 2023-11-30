@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.EmailService;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.product.model.Product;
+import utez.edu.mx.dulceria.product.model.ProductDTO;
 import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.rol.model.RolDTO;
 import utez.edu.mx.dulceria.user.DTO.UserDTO;
@@ -37,7 +39,7 @@ public class UserController {
         return  userService.findById(id);
     }
 
-    @GetMapping("/Repatidor/")
+    @PostMapping("/Repatidor/")
     public ResponseEntity<Message> getAllRepatidor(@RequestBody RolDTO rolDTO){
         return  userService.findAllRepatidor(new Rol(rolDTO.getId(), rolDTO.getDescription(), rolDTO.getAcronym()));
     }
@@ -46,6 +48,12 @@ public class UserController {
     public  ResponseEntity<Message> saveUsersave(@RequestBody UserDTO userDTO){
         return  userService.save(new User(passwordEncoder.encode(userDTO.getPassword()),userDTO.getUsername(),userDTO.getPerson(),userDTO.getStatus(),userDTO.getAuthorities()));
     }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Message> setStatus(@PathVariable("id") long id){
+        return userService.setStatus(id);
+    }
+
 
     @PostMapping("/password/")
     public ResponseEntity<Message> sendMailContact(@RequestBody UserDTO userDTO,

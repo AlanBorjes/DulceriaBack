@@ -39,6 +39,18 @@ public class VisitService  {
     }
 
     @Transactional(readOnly = true)
+    public  ResponseEntity<Message> findByStore(Long id){
+        List<Visit> visits = visitRepository.findByStoreId(id);
+        return new ResponseEntity<>(new Message("Ok", false, visits), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public  ResponseEntity<Message> findByDeliver(Long id){
+        List<Visit> visits = visitRepository.findByStoreDeliverId(id);
+        return new ResponseEntity<>(new Message("Ok", false, visits), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
     public ResponseEntity<Message> findById(Long id) {
         Optional<Visit> visit = visitRepository.findById(id);
         return visit.map(value -> new ResponseEntity<>(new Message("OK", false, value), HttpStatus.OK))
