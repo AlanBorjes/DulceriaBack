@@ -46,7 +46,21 @@
             this.status = status;
             this.personDTO = personDTO;
         }
-
+        public UserDTO(String username, String password, String code,  int status, Person personDTO) {
+            this.username = username;
+            this.password = password;
+            this.code = code;
+            this.status = status;
+            this.person = personDTO;
+        }
+        public UserDTO(String username, String password, String code, Set<Rol> authorities, int status, Person personDTO) {
+            this.username = username;
+            this.password = password;
+            this.code = code;
+            this.authorities = authorities;
+            this.status = status;
+            this.person = personDTO;
+        }
         public UserDTO(long id, String password, String code, String code1, Set<Rol> authorities, int status, String username) {
             this.password = password;
             this.username = username;

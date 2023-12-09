@@ -15,11 +15,10 @@ import utez.edu.mx.dulceria.user.DTO.UserDTO;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.repository.UserRepository;
 
-import javax.management.relation.Role;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -80,7 +79,38 @@ public class UserService {
 
     }
 
+    @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
+    public ResponseEntity<Message> save2(User user,int rol){
+        Set<Rol> roles = null;
+        if(rol ==1 ){
+           Rol rol1 = getByIdRol(1);
+           roles.add(rol1);
+        }else if (rol ==2 ){
+            Rol rol2 = getByIdRol(1);
+            roles.add(rol2);
+        }else{
+            Rol rol1 = getByIdRol(1);
+            Rol rol2 = getByIdRol(1);
+            roles.add(rol1);
+            roles.add(rol2);
+        }
 
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return new ResponseEntity<>(new Message("El usuario ya existe", true, null), HttpStatus.BAD_REQUEST);
+        }
+        if(userRepository.existsByPersonEmail(user.getPerson().getEmail())) {
+            return new ResponseEntity<>(new Message("La persona ya cuenta con un usuario", true, null), HttpStatus.BAD_REQUEST);
+        }
+        Person personTemp = personRepository.getById(user.getPerson().getId());
+        user.setPerson(personTemp);
+        Hibernate.initialize(user.getPerson());
+        user.setUsername(personTemp.getEmail());
+        user.setAuthorities(roles);
+        User  e =  userRepository.saveAndFlush(user);
+        UserDTO use = new UserDTO(user.getId(), user.getPassword(),user.getCode(),user.getCode(),user.getAuthorities(),user.getStatus(),user.getUsername());
+        return new ResponseEntity<>(new Message("OK", false, use), HttpStatus.OK);
+
+    }
     @Transactional(readOnly = true)
     public Optional<User> getByCode(String code){
         return userRepository.findByCode(code);
@@ -92,6 +122,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Rol getByIdRol(long id){
+        return rolRepository.findById(id);
+    }
 
 }
 
