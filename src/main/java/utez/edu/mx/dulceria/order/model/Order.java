@@ -17,6 +17,7 @@ public class Order {
     private long id;
     private String description;
     private String observaciones;
+    private String incidencias;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_order_id")
     private Status_order status;

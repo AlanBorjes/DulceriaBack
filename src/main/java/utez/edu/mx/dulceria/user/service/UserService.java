@@ -1,5 +1,6 @@
 package utez.edu.mx.dulceria.user.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.person.repository.PersonRepository;
 import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.rol.repository.RolRepository;
+import utez.edu.mx.dulceria.user.DTO.UserDTO;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.repository.UserRepository;
 
@@ -70,9 +72,11 @@ public class UserService {
             }
             Person personTemp = personRepository.getById(user.getPerson().getId());
             user.setPerson(personTemp);
+            Hibernate.initialize(user.getPerson());
             user.setUsername(personTemp.getEmail());
-
-            return new ResponseEntity<>(new Message("OK", false, userRepository.saveAndFlush(user)), HttpStatus.OK);
+            User  e =  userRepository.saveAndFlush(user);
+            UserDTO use = new UserDTO(user.getId(), user.getPassword(),user.getCode(),user.getCode(),user.getAuthorities(),user.getStatus(),user.getUsername());
+            return new ResponseEntity<>(new Message("OK", false, use), HttpStatus.OK);
 
     }
 

@@ -1,5 +1,6 @@
 package utez.edu.mx.dulceria;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,6 +55,7 @@ public class MyRunner implements CommandLineRunner {
     Person person2 = new Person("Jesus Perez","Brito salgado","3 de mayo N.4","7773195078","jesus@gmail.com",23,"M");
     @Override
     public void run(String... args) throws Exception {
+
         rol = repositoryrol.saveAndFlush(rol);
         rol1 = repositoryrol.saveAndFlush(rol1);
         Set<Rol> roles = Set.of(rol,rol1);

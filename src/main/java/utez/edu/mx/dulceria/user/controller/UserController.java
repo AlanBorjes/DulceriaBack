@@ -1,5 +1,6 @@
 package utez.edu.mx.dulceria.user.controller;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.dulceria.Utils.EmailService;
 import utez.edu.mx.dulceria.Utils.Message;
+import utez.edu.mx.dulceria.person.model.Person;
+import utez.edu.mx.dulceria.person.model.PersonDTO;
 import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.rol.model.RolDTO;
 import utez.edu.mx.dulceria.user.DTO.UserDTO;
@@ -43,8 +46,24 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public  ResponseEntity<Message> saveUsersave(@RequestBody UserDTO userDTO){
-        return  userService.save(new User(passwordEncoder.encode(userDTO.getPassword()),userDTO.getUsername(),userDTO.getPerson(),userDTO.getStatus(),userDTO.getAuthorities()));
+    public ResponseEntity<Message> createUser(@RequestBody UserDTO createUserDTO) {
+        Hibernate.initialize(createUserDTO.getPerson());
+        try {
+            // Crear un nuevo objeto User usando los datos del DTO y guardar en la base de datos
+            User newUser = new User(
+                    passwordEncoder.encode(createUserDTO.getPassword()),
+                    createUserDTO.getUsername(),
+                    createUserDTO.getPerson(),
+                    createUserDTO.getStatus(),
+                    createUserDTO.getAuthorities()
+            );
+
+            // Puedes devolver directamente el nuevo usuario como parte de la respuesta
+            return new ResponseEntity<>(new Message("Usuario creado con éxito", false,  userService.save(newUser)), HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Manejar cualquier excepción que pueda ocurrir durante la creación del usuario
+            return new ResponseEntity<>(new Message("Error al crear el usuario", true, null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/password/")
@@ -61,6 +80,5 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }
