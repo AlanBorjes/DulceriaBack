@@ -1,20 +1,25 @@
 package utez.edu.mx.dulceria.user.controller;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.dulceria.Utils.EmailService;
 import utez.edu.mx.dulceria.Utils.Message;
-import utez.edu.mx.dulceria.product.model.Product;
-import utez.edu.mx.dulceria.product.model.ProductDTO;
+import utez.edu.mx.dulceria.Utils.SaveImage;
+import utez.edu.mx.dulceria.person.model.Person;
+import utez.edu.mx.dulceria.person.model.PersonDTO;
 import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.rol.model.RolDTO;
 import utez.edu.mx.dulceria.user.DTO.UserDTO;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.service.UserService;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
@@ -25,7 +30,8 @@ public class UserController {
     UserService userService;
     @Autowired
     PasswordEncoder passwordEncoder;
-
+    @Autowired
+    SaveImage saveImage;
     @Autowired
     EmailService emailService;
 
@@ -45,13 +51,47 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public  ResponseEntity<Message> saveUsersave(@RequestBody UserDTO userDTO){
-        return  userService.save(new User(passwordEncoder.encode(userDTO.getPassword()),userDTO.getUsername(),userDTO.getPerson(),userDTO.getStatus(),userDTO.getAuthorities()));
+    public ResponseEntity<Message> createUser(@RequestBody UserDTO createUserDTO) {
+        Hibernate.initialize(createUserDTO.getPerson());
+        try {
+            // Crear un nuevo objeto User usando los datos del DTO y guardar en la base de datos
+            User newUser = new User(
+                    passwordEncoder.encode(createUserDTO.getPassword()),
+                    createUserDTO.getUsername(),
+                    createUserDTO.getPerson(),
+                    createUserDTO.getStatus(),
+                    createUserDTO.getAuthorities()
+            );
+
+            // Puedes devolver directamente el nuevo usuario como parte de la respuesta
+            return new ResponseEntity<>(new Message("Usuario creado con éxito", false,  userService.save(newUser)), HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Manejar cualquier excepción que pueda ocurrir durante la creación del usuario
+            return new ResponseEntity<>(new Message("Error al crear el usuario", true, null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PutMapping("/status/{id}")
-    public ResponseEntity<Message> setStatus(@PathVariable("id") long id){
-        return userService.setStatus(id);
+    @PostMapping("/saveImage")
+    public ResponseEntity<Message> save (@RequestParam("image")
+    MultipartFile image,@RequestParam("username") String username,@RequestParam("password") String password,@RequestParam("person") Person person,@RequestParam("code") String code,@RequestParam("status") int status,@RequestParam("rol") int rol){
+        UserDTO createUserDTO = new UserDTO(username,password,code,status,person);
+        try {
+            // Crear un nuevo objeto User usando los datos del DTO y guardar en la base de datos
+            User newUser = new User(
+                    passwordEncoder.encode(createUserDTO.getPassword()),
+                    saveImage.upload(image),
+                    createUserDTO.getUsername(),
+                    createUserDTO.getPerson(),
+                    createUserDTO.getStatus(),
+                    createUserDTO.getAuthorities()
+            );
+
+            // Puedes devolver directamente el nuevo usuario como parte de la respuesta
+            return new ResponseEntity<>(new Message("Usuario creado con éxito", false,  userService.save2(newUser,rol)), HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Manejar cualquier excepción que pueda ocurrir durante la creación del usuario
+            return new ResponseEntity<>(new Message("Error al crear el usuario", true, null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -69,6 +109,5 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }

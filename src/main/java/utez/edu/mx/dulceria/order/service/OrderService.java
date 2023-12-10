@@ -9,11 +9,13 @@ import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.order.model.Order;
 import utez.edu.mx.dulceria.order.model.OrderDTO;
 import utez.edu.mx.dulceria.order.repository.OrderRepository;
+import utez.edu.mx.dulceria.orderHasProduct.model.Order_has_Product;
 import utez.edu.mx.dulceria.statusOrder.model.StatusOrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
 import utez.edu.mx.dulceria.visit.model.Visit;
 import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
@@ -77,6 +79,14 @@ public class OrderService {
             orderRepository.deleteById(id);
             return new ResponseEntity<>(new Message("OK", false, null), HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
+    public ResponseEntity<Message> update(Order order){
+        if(orderRepository.existsById(order.getId())){
+            return new ResponseEntity<>(new Message("OK", false, orderRepository.saveAndFlush(order)), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Message("El Project no existe", true, null), HttpStatus.BAD_REQUEST);
     }
 
     @Transactional(readOnly = true)
