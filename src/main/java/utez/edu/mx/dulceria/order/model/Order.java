@@ -47,6 +47,23 @@ public class Order {
         productList = productList;
     }
 
+    public Order(long id, String description, String observaciones, String incidencias, Status_order status, Visit visit) {
+        this.id = id;
+        this.description = description;
+        this.observaciones = observaciones;
+        this.incidencias = incidencias;
+        this.status = status;
+        this.visit = visit;
+    }
+
+    public String getIncidencias() {
+        return incidencias;
+    }
+
+    public void setIncidencias(String incidencias) {
+        this.incidencias = incidencias;
+    }
+
     public long getId() {
         return id;
     }

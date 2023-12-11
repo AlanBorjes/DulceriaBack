@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAll();
     boolean existsById(long id);
+
+    Visit findById(long id);
 }
