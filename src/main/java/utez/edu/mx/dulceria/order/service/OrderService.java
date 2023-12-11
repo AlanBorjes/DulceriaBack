@@ -37,6 +37,11 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public ResponseEntity<Message> findByVisit(long id){
+        return new ResponseEntity<>(new Message("OK", false, orderRepository.findByVisitId(id)), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
     public ResponseEntity<Message> findOrderById(long id) {
         Optional<Order> orderOptional = orderRepository.findById(id);
         if (orderOptional.isPresent()) {

@@ -1,4 +1,4 @@
-package utez.edu.mx.dulceria;
+/* package utez.edu.mx.dulceria;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,3 +76,4 @@ public class MyRunner implements CommandLineRunner {
         logger.info("Status Order insertados");
     }
 }
+*/

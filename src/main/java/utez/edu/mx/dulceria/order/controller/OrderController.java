@@ -43,6 +43,11 @@ public class OrderController {
         return orderService.findOrderById(id);
     }
 
+    @GetMapping("/visit/{id}")
+    public ResponseEntity<Message> getByVisit1(@PathVariable long id){
+        return orderService.findByVisit(id);
+    }
+
     @PostMapping("/")
     public ResponseEntity<Message> saveOrder(@RequestBody OrderDTO orderDTO) {
         return orderService.saveOrder(orderDTO);

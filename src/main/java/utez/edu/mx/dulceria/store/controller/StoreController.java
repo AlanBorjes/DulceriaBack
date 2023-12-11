@@ -26,6 +26,10 @@ public class StoreController {
         return  storeService.findById(id);
     }
 
+    @GetMapping("/deliver/{id}")
+    public ResponseEntity<Message> getByDeliver(@PathVariable Long id){
+        return  storeService.findByDeliver(id);
+    }
     @PostMapping("/")
     public ResponseEntity<Message> save(@RequestBody StoreDTO object){
         return  storeService.save(new Store(object.getName(),object.getAddress(),object.getRfc(),object.getOwner(),object.getDeliver()));

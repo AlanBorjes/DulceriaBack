@@ -24,6 +24,8 @@ public class OrderDTO {
         this.observaciones = observaciones;
     }
 
+
+
     public OrderDTO(long id, String description, String observaciones, Status_order status, Visit visit, List<Order_has_Product> productList) {
         this.id = id;
         this.description = description;
@@ -89,6 +91,14 @@ public class OrderDTO {
 
     public void setVisit(Visit visit) {
         this.visit = visit;
+    }
+
+    public String getIncidencias() {
+        return incidencias;
+    }
+
+    public void setIncidencias(String incidencias) {
+        this.incidencias = incidencias;
     }
 
     public List<Order_has_Product> getProductList() {
