@@ -63,21 +63,5 @@ public class Rol {
         this.description = description;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "Rol{" +
-                "id=" + id +
-                ", acronym='" + acronym + '\'' +
-                ", description='" + description + '\'' +
-                ", users=" + users +
-                '}';
-    }
 }

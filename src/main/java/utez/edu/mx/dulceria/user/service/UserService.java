@@ -28,7 +28,6 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     PersonRepository personRepository;
-
     @Autowired
     RolRepository rolRepository;
 
@@ -97,36 +96,31 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
-    public ResponseEntity<Message> save2(User user,int rol){
-        Set<Rol> roles = null;
-        if(rol ==1 ){
-           Rol rol1 = getByIdRol(1);
-           roles.add(rol1);
-        }else if (rol ==2 ){
-            Rol rol2 = getByIdRol(1);
-            roles.add(rol2);
-        }else{
-            Rol rol1 = getByIdRol(1);
-            Rol rol2 = getByIdRol(1);
-            roles.add(rol1);
-            roles.add(rol2);
-        }
+    public ResponseEntity<Message> save2(User user,long rol){
+
+        System.out.println(user.getUsername());
 
         if (userRepository.existsByUsername(user.getUsername())) {
             return new ResponseEntity<>(new Message("El usuario ya existe", true, null), HttpStatus.BAD_REQUEST);
         }
-        if(userRepository.existsByPersonEmail(user.getPerson().getEmail())) {
+
+        if (userRepository.existsByPersonEmail(user.getPerson().getEmail())) {
             return new ResponseEntity<>(new Message("La persona ya cuenta con un usuario", true, null), HttpStatus.BAD_REQUEST);
         }
+
         Person personTemp = personRepository.getById(user.getPerson().getId());
         user.setPerson(personTemp);
-        Hibernate.initialize(user.getPerson());
-        user.setUsername(personTemp.getEmail());
-        user.setAuthorities(roles);
-        User  e =  userRepository.saveAndFlush(user);
-        UserDTO use = new UserDTO(user.getId(), user.getPassword(),user.getCode(),user.getCode(),user.getAuthorities(),user.getStatus(),user.getUsername());
-        return new ResponseEntity<>(new Message("OK", false, use), HttpStatus.OK);
 
+        // Forzar la inicialización de las propiedades perezosas
+        Hibernate.initialize(user.getPerson());
+        Hibernate.initialize(user.getAuthorities());
+
+        User savedUser = userRepository.saveAndFlush(user);
+
+        // Crear un UserDTO con las propiedades necesarias
+        UserDTO userDTO = new UserDTO(savedUser.getId(), savedUser.getUsername(), savedUser.getPassword(), savedUser.getCode(), savedUser.getStatus());
+
+        return new ResponseEntity<>(new Message("OK", false, userDTO), HttpStatus.OK);
     }
     @Transactional(readOnly = true)
     public Optional<User> getByCode(String code){
@@ -139,10 +133,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    @Transactional(readOnly = true)
-    public Rol getByIdRol(long id){
-        return rolRepository.findById(id);
-    }
+
 
 }
 

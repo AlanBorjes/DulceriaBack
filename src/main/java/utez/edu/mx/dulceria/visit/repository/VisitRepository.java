@@ -14,4 +14,6 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findByStoreId(long id);
     List<Visit> findByStoreDeliverId(long id);
     boolean existsById(long id);
+
+    Visit findById(long id);
 }

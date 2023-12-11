@@ -54,8 +54,8 @@ public class OrderService {
     @Transactional(rollbackFor = {Exception.class})
     public ResponseEntity<Message> saveOrder(OrderDTO orderDTO) {
         try {
-            Status_order status = getByOrderVisit(orderDTO.getStatus().getId()).orElseThrow(() -> new RuntimeException("status not found"));
-            Visit visit = getByVisit(orderDTO.getVisit().getId()).orElseThrow(() -> new RuntimeException("status not found"));
+            Status_order status = getByOrderVisit(orderDTO.getStatus().getId());
+            Visit visit = getByVisit(orderDTO.getVisit().getId());
 
             Order order = new Order();
             order.setDescription(orderDTO.getDescription());
@@ -90,12 +90,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Status_order> getByOrderVisit(long id){
+    public Status_order getByOrderVisit(long id){
         return statusOrderRepository.findById(id);
     }
 
     @Transactional(readOnly = true)
-    public Optional<Visit> getByVisit(long id){
+    public Visit getByVisit(long id){
         return visitRepository.findById(id);
     }
 }

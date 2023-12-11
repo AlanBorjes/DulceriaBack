@@ -13,12 +13,15 @@ import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.Utils.SaveImage;
 import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.person.model.PersonDTO;
+import utez.edu.mx.dulceria.person.repository.PersonRepository;
 import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.rol.model.RolDTO;
+import utez.edu.mx.dulceria.rol.repository.RolRepository;
 import utez.edu.mx.dulceria.user.DTO.UserDTO;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.service.UserService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -34,7 +37,10 @@ public class UserController {
     SaveImage saveImage;
     @Autowired
     EmailService emailService;
-
+    @Autowired
+    PersonRepository personRepository;
+    @Autowired
+    RolRepository rolRepository;
     @GetMapping("/")
     public ResponseEntity<Message> getAll(){
         return  userService.findAll();
@@ -73,8 +79,27 @@ public class UserController {
 
     @PostMapping("/saveImage")
     public ResponseEntity<Message> save (@RequestParam("image")
-    MultipartFile image,@RequestParam("username") String username,@RequestParam("password") String password,@RequestParam("person") Person person,@RequestParam("code") String code,@RequestParam("status") int status,@RequestParam("rol") int rol){
-        UserDTO createUserDTO = new UserDTO(username,password,code,status,person);
+    MultipartFile image,@RequestParam("username") String username,@RequestParam("password") String password,@RequestParam("person") String person,@RequestParam("code") String code,@RequestParam("status") String status,@RequestParam("rol") String rol){
+        Person personTemp = personRepository.getById(Long.valueOf(person));
+        Long rolnew = Long.valueOf(rol);
+        Set<Rol> roles = new HashSet<>(); // Inicializar roles como un conjunto
+        System.out.println(roles);
+
+        if (rolnew == 1) {
+            Rol rol1 = rolRepository.getById(rolnew);
+            roles.add(rol1);
+        } else if (rolnew == 2) {
+            Rol rol2 = rolRepository.getById(rolnew);
+            roles.add(rol2);
+        } else {
+            Rol rol1 = rolRepository.getById(1L);
+            Rol rol2 = rolRepository.getById(2L);
+            roles.add(rol1);
+            roles.add(rol2);
+        }
+
+        System.out.println(roles);
+        UserDTO createUserDTO = new UserDTO(username,password,code, Integer.parseInt(status),personTemp);
         try {
             // Crear un nuevo objeto User usando los datos del DTO y guardar en la base de datos
             User newUser = new User(
@@ -83,11 +108,10 @@ public class UserController {
                     createUserDTO.getUsername(),
                     createUserDTO.getPerson(),
                     createUserDTO.getStatus(),
-                    createUserDTO.getAuthorities()
+                    roles
             );
-
             // Puedes devolver directamente el nuevo usuario como parte de la respuesta
-            return new ResponseEntity<>(new Message("Usuario creado con éxito", false,  userService.save2(newUser,rol)), HttpStatus.CREATED);
+            return new ResponseEntity<>(new Message("Usuario creado con éxito", false,  userService.save2(newUser, Long.parseLong(rol))), HttpStatus.CREATED);
         } catch (Exception e) {
             // Manejar cualquier excepción que pueda ocurrir durante la creación del usuario
             return new ResponseEntity<>(new Message("Error al crear el usuario", true, null), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -70,6 +70,14 @@
 
         }
 
+        public UserDTO(long id, String username, String password, String code, int status) {
+            this.id = id;
+            this.username = username;
+            this.password = password;
+            this.code = code;
+            this.status = status;
+        }
+
         public PersonDTO getPersonDTO() {
             return personDTO;
         }
