@@ -45,6 +45,12 @@ public class VisitService  {
     }
 
     @Transactional(readOnly = true)
+    public  ResponseEntity<Message> findByStatusNot(Long deliver, Long status){
+        List<Visit> visits = visitRepository.findByStoreDeliverIdAndStatusIdNot(deliver, status);
+        return new ResponseEntity<>(new Message("Ok", false, visits), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
     public  ResponseEntity<Message> findByDeliver(Long id){
         List<Visit> visits = visitRepository.findByStoreDeliverId(id);
         return new ResponseEntity<>(new Message("Ok", false, visits), HttpStatus.OK);

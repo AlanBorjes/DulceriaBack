@@ -44,7 +44,7 @@ public class OrderController {
     }
 
     @GetMapping("/visit/{id}")
-    public ResponseEntity<Message> getByVisit(@PathVariable long id){
+    public ResponseEntity<Message> getByVisit1(@PathVariable long id){
         return orderService.findByVisit(id);
     }
 

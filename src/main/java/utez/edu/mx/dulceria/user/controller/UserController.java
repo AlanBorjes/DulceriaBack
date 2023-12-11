@@ -114,8 +114,13 @@ public class UserController {
             return new ResponseEntity<>(new Message("Usuario creado con éxito", false,  userService.save2(newUser, Long.parseLong(rol))), HttpStatus.CREATED);
         } catch (Exception e) {
             // Manejar cualquier excepción que pueda ocurrir durante la creación del usuario
-            return new ResponseEntity<>(new Message("Error al crear el usuario", true, null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new Message("Error al crear el usuario: " +e, true, null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Message> setStatus(@PathVariable("id") long id){
+        return userService.setStatus(id);
     }
 
 

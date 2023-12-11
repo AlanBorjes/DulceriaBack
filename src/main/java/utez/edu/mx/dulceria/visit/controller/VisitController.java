@@ -28,6 +28,10 @@ public class VisitController {
         return  visitService.findById(id);
     }
 
+    @GetMapping("/pending/{id}")
+    public ResponseEntity<Message> getByStatusNot(@PathVariable Long id){
+        return  visitService.findByStatusNot(id, (long) 2L);
+    }
     @GetMapping("/store/{id}")
     public ResponseEntity<Message> getByStoreId(@PathVariable Long id){return visitService.findByStore(id);}
 

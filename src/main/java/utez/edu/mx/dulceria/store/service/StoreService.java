@@ -38,6 +38,12 @@ public class StoreService {
                 .orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<Message> findByDeliver(Long id) {
+        //List<Store> stores = storeRepository.findAll();
+        return new ResponseEntity<>(new Message("OK", false, storeRepository.findByDeliverId(id)), HttpStatus.OK);
+    }
+
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Message> save(Store store) {
         Person owner = getByPerson(store.getOwner().getId()).orElseThrow(() -> new RuntimeException("Owner not found"));
