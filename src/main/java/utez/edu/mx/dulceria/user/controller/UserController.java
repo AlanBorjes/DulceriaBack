@@ -51,6 +51,11 @@ public class UserController {
         return  userService.findById(id);
     }
 
+    @GetMapping("/person/{id}")
+    public  ResponseEntity<Message> getByPersonId(@PathVariable("id") long id){
+        return  userService.findByPersonId(id);
+    }
+
     @GetMapping("/Repatidor/{id}")
     public ResponseEntity<Message> getAllRepatidor(@PathVariable("id") long id){
         return  userService.findAllRepatidor(new Rol(id));
