@@ -29,8 +29,8 @@ public class Store {
     @JoinColumn(name = "deliver_id")
     private Person deliver;
 
-    @OneToMany(mappedBy = "store")
     @JsonIgnore
+    @OneToMany(mappedBy = "store")
     private List<Visit> visitList;
 
     public Store() {

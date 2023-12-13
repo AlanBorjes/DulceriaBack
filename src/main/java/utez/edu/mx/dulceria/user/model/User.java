@@ -17,12 +17,13 @@ public class User {
     @Column(unique = true)
     private String username;
     private String code;
+    private String image;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
     @Column()
     private int status;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Rol> authorities;
@@ -73,6 +74,34 @@ public class User {
         this.status = status;
         this.authorities = authorities;
     }
+    public User(String password, String image, String username, Person person, int status, Set<Rol> authorities) {
+        this.password = password;
+        this.username = username;
+        this.image = image;
+        this.person = person;
+        this.status = status;
+        this.authorities = authorities;
+    }
+    public User(long id, String password, String username, String code, String image, Person person, int status, Set<Rol> authorities) {
+        this.id = id;
+        this.password = password;
+        this.username = username;
+        this.code = code;
+        this.image = image;
+        this.person = person;
+        this.status = status;
+        this.authorities = authorities;
+    }
+
+    public User(String password, String username, String code, String image, Person person, int status, Set<Rol> authorities) {
+        this.password = password;
+        this.username = username;
+        this.code = code;
+        this.image = image;
+        this.person = person;
+        this.status = status;
+        this.authorities = authorities;
+    }
 
     public User(long id, String password) {
         this.id = id;
@@ -108,15 +137,6 @@ public class User {
 
     public User(String password, Person person, int status, Set<Rol> authorities) {
         this.password = password;
-        this.person = person;
-        this.status = status;
-        this.authorities = authorities;
-    }
-
-    public User(String password, String username, String code, Person person, int status, Set<Rol> authorities) {
-        this.password = password;
-        this.username = username;
-        this.code = code;
         this.person = person;
         this.status = status;
         this.authorities = authorities;
@@ -176,6 +196,14 @@ public class User {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

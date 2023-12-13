@@ -10,6 +10,7 @@ public class OrderDTO {
     private long id;
     private String description;
     private String observaciones;
+    private String incidencias;
     private Status_order status;
     private Visit visit;
     private List<Order_has_Product> productList;
@@ -23,6 +24,8 @@ public class OrderDTO {
         this.observaciones = observaciones;
     }
 
+
+
     public OrderDTO(long id, String description, String observaciones, Status_order status, Visit visit, List<Order_has_Product> productList) {
         this.id = id;
         this.description = description;
@@ -30,6 +33,24 @@ public class OrderDTO {
         this.status = status;
         this.visit = visit;
         this.productList = productList;
+    }
+
+    public OrderDTO(long id, String description, String observaciones, String incidencias, Status_order status, Visit visit, List<Order_has_Product> productList) {
+        this.id = id;
+        this.description = description;
+        this.observaciones = observaciones;
+        this.incidencias = incidencias;
+        this.status = status;
+        this.visit = visit;
+        this.productList = productList;
+    }
+
+    public OrderDTO(String description, String observaciones, String incidencias, Status_order status, Visit visit) {
+        this.description = description;
+        this.observaciones = observaciones;
+        this.incidencias = incidencias;
+        this.status = status;
+        this.visit = visit;
     }
 
     public long getId() {
@@ -70,6 +91,14 @@ public class OrderDTO {
 
     public void setVisit(Visit visit) {
         this.visit = visit;
+    }
+
+    public String getIncidencias() {
+        return incidencias;
+    }
+
+    public void setIncidencias(String incidencias) {
+        this.incidencias = incidencias;
     }
 
     public List<Order_has_Product> getProductList() {

@@ -17,6 +17,7 @@ public class Order {
     private long id;
     private String description;
     private String observaciones;
+    private String incidencias;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_order_id")
     private Status_order status;
@@ -44,6 +45,23 @@ public class Order {
         this.observaciones = observaciones;
         this.status = status;
         productList = productList;
+    }
+
+    public Order(long id, String description, String observaciones, String incidencias, Status_order status, Visit visit) {
+        this.id = id;
+        this.description = description;
+        this.observaciones = observaciones;
+        this.incidencias = incidencias;
+        this.status = status;
+        this.visit = visit;
+    }
+
+    public String getIncidencias() {
+        return incidencias;
+    }
+
+    public void setIncidencias(String incidencias) {
+        this.incidencias = incidencias;
     }
 
     public long getId() {

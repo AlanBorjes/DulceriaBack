@@ -1,5 +1,6 @@
 package utez.edu.mx.dulceria.user.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +11,14 @@ import utez.edu.mx.dulceria.person.model.Person;
 import utez.edu.mx.dulceria.person.repository.PersonRepository;
 import utez.edu.mx.dulceria.rol.model.Rol;
 import utez.edu.mx.dulceria.rol.repository.RolRepository;
+import utez.edu.mx.dulceria.user.DTO.UserDTO;
 import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.user.repository.UserRepository;
 
-import javax.management.relation.Role;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -27,7 +28,6 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     PersonRepository personRepository;
-
     @Autowired
     RolRepository rolRepository;
 
@@ -51,9 +51,26 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<Message> findAllRepatidor(Rol role){
-        List<User> users = userRepository.findUsersByAuthorities(role);
+        List<User> users = userRepository.findUsersByAuthoritiesAndStatus(role, 1);
 
         return  new ResponseEntity<>(new Message("OK",false,users), HttpStatus.OK);
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> setStatus(long id){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()){
+            User user = userOptional.get();
+            if (user.getStatus() == 1) {
+                user.setStatus(0);
+            } else {
+                user.setStatus(1);
+            }
+            return new ResponseEntity<>(new Message("OK", false, userRepository.saveAndFlush(user)), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new Message("El usuario no existe", true, null), HttpStatus.BAD_REQUEST);
+
+        }
     }
 
 
@@ -70,13 +87,41 @@ public class UserService {
             }
             Person personTemp = personRepository.getById(user.getPerson().getId());
             user.setPerson(personTemp);
+            Hibernate.initialize(user.getPerson());
             user.setUsername(personTemp.getEmail());
-
-            return new ResponseEntity<>(new Message("OK", false, userRepository.saveAndFlush(user)), HttpStatus.OK);
+            User  e =  userRepository.saveAndFlush(user);
+            UserDTO use = new UserDTO(user.getId(), user.getPassword(),user.getCode(),user.getCode(),user.getAuthorities(),user.getStatus(),user.getUsername());
+            return new ResponseEntity<>(new Message("OK", false, use), HttpStatus.OK);
 
     }
 
+    @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
+    public ResponseEntity<Message> save2(User user,long rol){
 
+        System.out.println(user.getUsername());
+
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return new ResponseEntity<>(new Message("El usuario ya existe", true, null), HttpStatus.BAD_REQUEST);
+        }
+
+        if (userRepository.existsByPersonEmail(user.getPerson().getEmail())) {
+            return new ResponseEntity<>(new Message("La persona ya cuenta con un usuario", true, null), HttpStatus.BAD_REQUEST);
+        }
+
+        Person personTemp = personRepository.getById(user.getPerson().getId());
+        user.setPerson(personTemp);
+
+        // Forzar la inicialización de las propiedades perezosas
+        Hibernate.initialize(user.getPerson());
+        Hibernate.initialize(user.getAuthorities());
+
+        User savedUser = userRepository.saveAndFlush(user);
+
+        // Crear un UserDTO con las propiedades necesarias
+        UserDTO userDTO = new UserDTO(savedUser.getId(), savedUser.getUsername(), savedUser.getPassword(), savedUser.getCode(), savedUser.getStatus());
+
+        return new ResponseEntity<>(new Message("OK", false, userDTO), HttpStatus.OK);
+    }
     @Transactional(readOnly = true)
     public Optional<User> getByCode(String code){
         return userRepository.findByCode(code);
@@ -87,6 +132,7 @@ public class UserService {
     public Optional<User> getById(long id){
         return userRepository.findById(id);
     }
+
 
 
 }

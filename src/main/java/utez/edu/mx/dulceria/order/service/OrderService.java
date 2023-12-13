@@ -9,11 +9,13 @@ import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.order.model.Order;
 import utez.edu.mx.dulceria.order.model.OrderDTO;
 import utez.edu.mx.dulceria.order.repository.OrderRepository;
+import utez.edu.mx.dulceria.orderHasProduct.model.Order_has_Product;
 import utez.edu.mx.dulceria.statusOrder.model.StatusOrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
 import utez.edu.mx.dulceria.visit.model.Visit;
 import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
@@ -35,6 +37,11 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public ResponseEntity<Message> findByVisit(long id){
+        return new ResponseEntity<>(new Message("OK", false, orderRepository.findByVisitId(id)), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
     public ResponseEntity<Message> findOrderById(long id) {
         Optional<Order> orderOptional = orderRepository.findById(id);
         if (orderOptional.isPresent()) {
@@ -47,8 +54,8 @@ public class OrderService {
     @Transactional(rollbackFor = {Exception.class})
     public ResponseEntity<Message> saveOrder(OrderDTO orderDTO) {
         try {
-            Status_order status = getByOrderVisit(orderDTO.getStatus().getId()).orElseThrow(() -> new RuntimeException("status not found"));
-            Visit visit = getByVisit(orderDTO.getVisit().getId()).orElseThrow(() -> new RuntimeException("status not found"));
+            Status_order status = getByOrderVisit(orderDTO.getStatus().getId());
+            Visit visit = getByVisit(orderDTO.getVisit().getId());
 
             Order order = new Order();
             order.setDescription(orderDTO.getDescription());
@@ -74,13 +81,21 @@ public class OrderService {
         }).orElseGet(() -> new ResponseEntity<>(new Message("Not found", true, null), HttpStatus.NOT_FOUND));
     }
 
+    @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
+    public ResponseEntity<Message> update(Order order){
+        if(orderRepository.existsById(order.getId())){
+            return new ResponseEntity<>(new Message("OK", false, orderRepository.saveAndFlush(order)), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Message("El Project no existe", true, null), HttpStatus.BAD_REQUEST);
+    }
+
     @Transactional(readOnly = true)
-    public Optional<Status_order> getByOrderVisit(long id){
+    public Status_order getByOrderVisit(long id){
         return statusOrderRepository.findById(id);
     }
 
     @Transactional(readOnly = true)
-    public Optional<Visit> getByVisit(long id){
+    public Visit getByVisit(long id){
         return visitRepository.findById(id);
     }
 }

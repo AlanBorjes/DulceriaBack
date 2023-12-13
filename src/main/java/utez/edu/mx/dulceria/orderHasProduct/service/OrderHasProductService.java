@@ -36,10 +36,18 @@ public class OrderHasProductService {
         return new ResponseEntity<>(new Message("El Rol no existe", true, orderHasProductRepository.findById(id)), HttpStatus.BAD_REQUEST);
     }
 
-    @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
-    public ResponseEntity<Message> save(Order_has_Product rol){
-        Order_has_Product saved = orderHasProductRepository.saveAndFlush(rol);
-        return new ResponseEntity<>(new Message("Rol registrada correctamente", false, saved), HttpStatus.OK);
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> save(Order_has_Product orderProduct) {
+        Order_has_Product existingProduct = orderHasProductRepository
+                .findByOrderAndProduct(orderProduct.getOrder(), orderProduct.getProduct());
+        if (existingProduct != null) {
+            existingProduct.setCantidad(existingProduct.getCantidad() + orderProduct.getCantidad());
+            orderHasProductRepository.saveAndFlush(existingProduct);
+            return new ResponseEntity<>(new Message("Cantidad del producto actualizada correctamente", false, existingProduct), HttpStatus.OK);
+        } else {
+            Order_has_Product saved = orderHasProductRepository.saveAndFlush(orderProduct);
+            return new ResponseEntity<>(new Message("Producto registrado correctamente en la orden", false, saved), HttpStatus.OK);
+        }
     }
 
     @Transactional(rollbackFor = {SQLException.class}) // si encuenra un error lo vuelve a hacer
