@@ -7,7 +7,7 @@ services:
     volumes:
       - /home/ubuntu/sql:/var/lib/mysql
     networks:
-      - 10bnet
+      - netStat
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
@@ -27,5 +27,5 @@ services:
     networks:
       - netStat
 networks:
-  10bnet:
+  netStat:
     driver: bridge
