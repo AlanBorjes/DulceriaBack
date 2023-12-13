@@ -138,8 +138,6 @@ public class UserService {
     public Optional<User> getById(long id){
         return userRepository.findById(id);
     }
-
-
-
+    
 }
 

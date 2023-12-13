@@ -56,9 +56,9 @@ public class UserController {
         return  userService.findByPersonId(id);
     }
 
-    @PostMapping("/Repatidor/")
-    public ResponseEntity<Message> getAllRepatidor(@RequestBody RolDTO rolDTO){
-        return  userService.findAllRepatidor(new Rol(rolDTO.getId(), rolDTO.getDescription(), rolDTO.getAcronym()));
+    @GetMapping("/Repatidor/{id}")
+    public ResponseEntity<Message> getAllRepatidor(@PathVariable("id") long id){
+        return  userService.findAllRepatidor(new Rol(id));
     }
 
     @PostMapping("/")
