@@ -61,6 +61,11 @@ public class OrderController {
         return orderService.update(new Order(orderDTO.getId(),orderDTO.getDescription(),orderDTO.getObservaciones(),orderDTO.getStatus()));
     }
 
+    @PutMapping("/status/{id}")
+    public ResponseEntity<Message> setStatus(@PathVariable("id") long id){
+        return orderService.setStatus(id);
+    }
+
     @PutMapping("/incidencia/")
     public ResponseEntity<Message> updateIncidencia(@RequestParam("incidencia") MultipartFile multipartFile, @RequestParam("id") String id,@RequestParam("description") String description, @RequestParam("observaciones") String observaciones, @RequestParam("status") String status,@RequestParam("visit") String visit){
 
