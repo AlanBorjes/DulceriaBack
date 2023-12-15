@@ -1,6 +1,7 @@
 version: '2'
 services:
   db:
+    hostname: db
     image: mysql:8.0
     ports:
       - "3306:3306"
