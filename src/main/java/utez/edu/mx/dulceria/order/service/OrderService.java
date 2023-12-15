@@ -12,6 +12,7 @@ import utez.edu.mx.dulceria.order.repository.OrderRepository;
 import utez.edu.mx.dulceria.orderHasProduct.model.Order_has_Product;
 import utez.edu.mx.dulceria.statusOrder.model.StatusOrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
+import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.visit.model.Visit;
 import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
@@ -67,6 +68,23 @@ public class OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new Message("Error", true, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<Message> setStatus(long id){
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        if (orderOptional.isPresent()){
+            Order order = orderOptional.get();
+            if (order.getStatus().getId() == 1) {
+                order.setStatus( statusOrderRepository.findById(2));
+            } else {
+                order.setStatus( statusOrderRepository.findById(1));
+            }
+            return new ResponseEntity<>(new Message("OK", false, orderRepository.saveAndFlush(order)), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new Message("El usuario no existe", true, null), HttpStatus.BAD_REQUEST);
+
         }
     }
 

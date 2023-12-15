@@ -50,6 +50,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public ResponseEntity<Message> findByPersonId(long id){
+            return new ResponseEntity<>(new Message("OK", false, userRepository.findUserByPersonId(id)), HttpStatus.OK);
+
+    }
+
+    @Transactional(readOnly = true)
     public ResponseEntity<Message> findAllRepatidor(Rol role){
         List<User> users = userRepository.findUsersByAuthoritiesAndStatus(role, 1);
 
@@ -132,8 +138,6 @@ public class UserService {
     public Optional<User> getById(long id){
         return userRepository.findById(id);
     }
-
-
-
+    
 }
 
