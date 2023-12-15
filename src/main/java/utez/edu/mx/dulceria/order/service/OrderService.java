@@ -9,10 +9,8 @@ import utez.edu.mx.dulceria.Utils.Message;
 import utez.edu.mx.dulceria.order.model.Order;
 import utez.edu.mx.dulceria.order.model.OrderDTO;
 import utez.edu.mx.dulceria.order.repository.OrderRepository;
-import utez.edu.mx.dulceria.orderHasProduct.model.Order_has_Product;
 import utez.edu.mx.dulceria.statusOrder.model.StatusOrderRepository;
 import utez.edu.mx.dulceria.statusOrder.model.Status_order;
-import utez.edu.mx.dulceria.user.model.User;
 import utez.edu.mx.dulceria.visit.model.Visit;
 import utez.edu.mx.dulceria.visit.repository.VisitRepository;
 
